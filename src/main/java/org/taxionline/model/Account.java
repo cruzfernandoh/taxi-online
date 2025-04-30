@@ -17,10 +17,10 @@ public class Account extends IdModelBase {
     @Column( nullable = false )
     String name;
 
-    @Column( nullable = false )
+    @Column( unique = true, nullable = false )
     String email;
 
-    @Column( nullable = false )
+    @Column( unique = true, nullable = false )
     String cpf;
 
     String carPlate;

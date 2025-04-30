@@ -1,12 +1,13 @@
 package org.taxionline.model.base;
 
-import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.PrePersist;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.Instant;
 import java.util.UUID;
 
 @Getter
@@ -15,11 +16,23 @@ import java.util.UUID;
 public abstract class IdModelBase {
 
     @Id
+    @GeneratedValue( strategy = GenerationType.IDENTITY )
     @Setter( AccessLevel.NONE )
-    String id;
+    Long id;
+
+    @Setter( AccessLevel.NONE )
+    String identifier;
+
+    @CreationTimestamp
+    @Setter( AccessLevel.NONE )
+    Instant created;
+
+    @UpdateTimestamp
+    @Setter( AccessLevel.NONE )
+    Instant updated;
 
     @PrePersist
     private void prePersist( ) {
-        this.id = UUID.randomUUID( ).toString( );
+        this.identifier = UUID.randomUUID( ).toString( );
     }
 }
