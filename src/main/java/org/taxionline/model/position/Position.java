@@ -1,4 +1,4 @@
-package org.taxionline.model;
+package org.taxionline.model.position;
 
 import jakarta.persistence.Entity;
 import lombok.Getter;

@@ -1,10 +1,13 @@
-package org.taxionline.model;
+package org.taxionline.model.ride;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.taxionline.model.account.Account;
 import org.taxionline.model.base.IdModelBase;
 
 import java.time.LocalDateTime;
@@ -15,9 +18,13 @@ import java.time.LocalDateTime;
 @Entity
 public class Ride extends IdModelBase {
 
-    String passengerId;
+    @ManyToOne
+    @JoinColumn( nullable = false )
+    Account passenger;
 
-    String driverId;
+    @ManyToOne
+    @JoinColumn( nullable = false )
+    Account driver;
 
     String status;
 
@@ -36,9 +43,9 @@ public class Ride extends IdModelBase {
     LocalDateTime date;
 
     @Builder
-    public Ride( String passengerId, String driverId, String status, Double fare, Double distance, Double fromLat, Double fromLon, Double toLat, Double toLong, LocalDateTime date ) {
-        this.passengerId = passengerId;
-        this.driverId = driverId;
+    public Ride( Account passenger, Account driver, String status, Double fare, Double distance, Double fromLat, Double fromLon, Double toLat, Double toLong, LocalDateTime date ) {
+        this.passenger = passenger;
+        this.driver = driver;
         this.status = status;
         this.fare = fare;
         this.distance = distance;

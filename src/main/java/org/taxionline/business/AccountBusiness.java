@@ -8,7 +8,7 @@ import org.taxionline.core.exception.DuplicateAttributeException;
 import org.taxionline.core.exception.ResourceNotFoundException;
 import org.taxionline.dto.account.AccountDTO;
 import org.taxionline.dto.account.CreateAccountDTO;
-import org.taxionline.model.Account;
+import org.taxionline.model.account.Account;
 import org.taxionline.repository.AccountRepository;
 
 import java.util.regex.Pattern;

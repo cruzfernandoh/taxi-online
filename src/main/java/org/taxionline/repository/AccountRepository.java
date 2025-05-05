@@ -2,7 +2,7 @@ package org.taxionline.repository;
 
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 import jakarta.enterprise.context.ApplicationScoped;
-import org.taxionline.model.Account;
+import org.taxionline.model.account.Account;
 
 import java.util.Optional;
 

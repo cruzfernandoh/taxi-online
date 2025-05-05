@@ -1,4 +1,4 @@
-package org.taxionline.model;
+package org.taxionline.model.account;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
