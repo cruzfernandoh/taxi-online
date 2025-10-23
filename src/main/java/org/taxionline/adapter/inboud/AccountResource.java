@@ -1,6 +1,7 @@
 package org.taxionline.adapter.inboud;
 
 import io.javalin.http.Context;
+import jakarta.validation.executable.ValidateOnExecution;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.taxionline.core.business.account.AccountBusiness;
@@ -8,6 +9,7 @@ import org.taxionline.core.domain.account.AccountDTO;
 import org.taxionline.core.domain.account.CreateAccountDTO;
 import org.taxionline.di.BeanInjection;
 
+@ValidateOnExecution
 public class AccountResource {
 
     private static final Logger logger = LoggerFactory.getLogger(AccountResource.class);
@@ -16,7 +18,7 @@ public class AccountResource {
     AccountBusiness business;
 
     public void createAccount(Context ctx) {
-        CreateAccountDTO dto = ctx.bodyAsClass(CreateAccountDTO.class);
+        CreateAccountDTO dto = ctx.bodyValidator(CreateAccountDTO.class).get();
         logger.info("Creating account for: {}", dto);
         AccountDTO response = business.createAccount(dto);
         ctx.json(response);

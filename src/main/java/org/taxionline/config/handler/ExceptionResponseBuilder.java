@@ -9,7 +9,6 @@ public class ExceptionResponseBuilder {
 
     public static void build(Context ctx, String message, int status) {
         Map<String, Object> body = Map.of(
-                "status", status,
                 "message", message,
                 "timestamp", Instant.now().toString()
         );

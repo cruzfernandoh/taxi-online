@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.TypedQuery;
 import org.taxionline.config.dao.DataSourceManager;
+import org.taxionline.di.BeanInjection;
 
 import java.lang.reflect.ParameterizedType;
 import java.sql.SQLException;
@@ -12,6 +13,9 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 public abstract class BaseRepository<T> {
+
+    @BeanInjection
+    DataSourceManager manager;
 
     private final Class<T> entityClass;
 
@@ -44,21 +48,21 @@ public abstract class BaseRepository<T> {
     }
 
     public Optional<T> findById(Object id) throws SQLException {
-        try (EntityManager em = DataSourceManager.getInstance().getEntityManager()) {
+        try (EntityManager em = manager.getEntityManager()) {
             T entity = em.find(entityClass, id);
             return Optional.ofNullable(entity);
         }
     }
 
     public List<T> findAll() throws SQLException {
-        try (EntityManager em = DataSourceManager.getInstance().getEntityManager()) {
+        try (EntityManager em = manager.getEntityManager()) {
             TypedQuery<T> query = em.createQuery("SELECT e FROM " + entityClass.getSimpleName() + " e", entityClass);
             return query.getResultList();
         }
     }
 
     public QueryResult<T> find(String condition, Object... params) {
-        EntityManager em = DataSourceManager.getInstance().getEntityManager();
+        EntityManager em = manager.getEntityManager();
 
         String jpql = "SELECT e FROM " + entityClass.getSimpleName() + " e WHERE " + condition;
         TypedQuery<T> query = em.createQuery(jpql, entityClass);
@@ -71,7 +75,7 @@ public abstract class BaseRepository<T> {
     }
 
     public long count(String condition, Object... params) {
-        EntityManager em = DataSourceManager.getInstance().getEntityManager();
+        EntityManager em = manager.getEntityManager();
 
         String jpql = "SELECT e FROM " + entityClass.getSimpleName() + " e WHERE " + condition;
         TypedQuery<T> query = em.createQuery(jpql, entityClass);
@@ -84,7 +88,7 @@ public abstract class BaseRepository<T> {
     }
 
     private void executeInTransaction(Consumer<EntityManager> action) {
-        try (EntityManager em = DataSourceManager.getInstance().getEntityManager()) {
+        try (EntityManager em = manager.getEntityManager()) {
             EntityTransaction tx = em.getTransaction();
             try {
                 tx.begin();

@@ -21,16 +21,25 @@ public class BeanRegistry {
         }
     }
 
-    public void injectInto(Object bean) throws IllegalAccessException {
-        for (Field field : bean.getClass().getDeclaredFields()) {
-            if (field.isAnnotationPresent(BeanInjection.class)) {
-                Object dependency = beans.get(field.getType());
-                if (dependency == null) {
-                    throw new RuntimeException("Bean not registered: " + field.getType().getName());
+    public void injectInto(Object bean) {
+        Class<?> clazz = bean.getClass();
+        while (clazz != null) {
+            for (Field field : clazz.getDeclaredFields()) {
+                if (field.isAnnotationPresent(BeanInjection.class)) {
+                    Object dependency = beans.get(field.getType());
+                    if (dependency != null) {
+                        field.setAccessible(true);
+                        try {
+                            field.set(bean, dependency);
+                        } catch (IllegalAccessException e) {
+                            throw new RuntimeException("Failed to inject " + field.getName(), e);
+                        }
+                    } else {
+                        throw new RuntimeException("No bean registered for type: " + field.getType());
+                    }
                 }
-                field.setAccessible(true);
-                field.set(bean, dependency);
             }
+            clazz = clazz.getSuperclass();
         }
     }
 
