@@ -1,73 +1,62 @@
-//package base;
-//
-//import io.agroal.api.AgroalDataSource;
-//import io.agroal.api.configuration.AgroalDataSourceConfiguration;
-//import io.agroal.api.configuration.supplier.AgroalDataSourceConfigurationSupplier;
-//import io.agroal.api.security.NamePrincipal;
-//import io.restassured.RestAssured;
-//import io.undertow.Undertow;
-//import org.jboss.resteasy.core.ResteasyDeploymentImpl;
-//import org.jboss.resteasy.plugins.server.undertow.UndertowJaxrsServer;
-//import org.jboss.resteasy.spi.ResteasyDeployment;
-//import org.junit.jupiter.api.AfterAll;
-//import org.junit.jupiter.api.BeforeAll;
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
-//import org.taxionline.api.RestApplication;
-//
-//import java.sql.SQLException;
-//
-//public abstract class IntegrationTestBase {
-//
-//    private final static Logger logger = LoggerFactory.getLogger(IntegrationTestBase.class);
-//
-//    protected static UndertowJaxrsServer server;
-//
-//    protected static AgroalDataSource dataSource;
-//
-//    @BeforeAll
-//    static void startServer() throws SQLException {
-//        logger.info("Initialize testing environment...");
-//
-//        AgroalDataSourceConfiguration configuration = new AgroalDataSourceConfigurationSupplier()
-//                .connectionPoolConfiguration(cp -> cp
-//                        .maxSize(5)
-//                        .minSize(1)
-//                        .initialSize(1)
-//                        .connectionFactoryConfiguration(cf -> cf
-//                                .jdbcUrl("jdbc:h2:mem:default")
-//                                .connectionProviderClassName("org.h2.Driver")
-//                                .principal(new NamePrincipal("test_user"))
-//                        )
-//                ).get();
-//
-//        dataSource = AgroalDataSource.from(configuration);
-//
-//        logger.info("In-memory H2 database started for testing.");
-//
-//        ResteasyDeployment deployment = new ResteasyDeploymentImpl();
-//        deployment.setApplicationClass(RestApplication.class.getName());
-//
-//        server = new UndertowJaxrsServer();
-//        server.deploy(deployment);
-//        server.start(Undertow.builder().addHttpListener(8081, "0.0.0.0"));
-//
-//        RestAssured.baseURI = "http://localhost";
-//        RestAssured.port = 8081;
-//
-//        logger.info("Server started at http://localhost:8081");
-//    }
-//
-//    @AfterAll
-//    static void stopServer() throws Exception {
-//        if (server != null) {
-//            server.stop();
-//            logger.info("Test server finalized.");
-//        }
-//
-//        if (dataSource instanceof AutoCloseable ds) {
-//            ds.close();
-//            System.out.println("DataSource closed");
-//        }
-//    }
-//}
+package base;
+
+import io.javalin.Javalin;
+import io.javalin.http.HandlerType;
+import io.javalin.router.Endpoint;
+import io.restassured.RestAssured;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.taxionline.adapter.inboud.AccountResource;
+import org.taxionline.adapter.outbound.AccountRepositoryAdapter;
+import org.taxionline.config.dao.DataSourceManager;
+import org.taxionline.config.handler.RegisterJavalinException;
+import org.taxionline.core.business.account.AccountBusiness;
+import org.taxionline.di.BeanRegistry;
+import org.taxionline.port.account.AccountRepository;
+
+public abstract class IntegrationTestBase {
+
+    private final static Logger logger = LoggerFactory.getLogger(IntegrationTestBase.class);
+
+    protected static Javalin app;
+
+    @BeforeAll
+    static void startServer() {
+        logger.info("Initialize testing environment...");
+
+        DataSourceManager manager = new DataSourceManagerTest();
+        manager.init();
+
+        BeanRegistry registry = new BeanRegistry();
+        registry.registerBean(DataSourceManager.class, manager);
+        registry.registerBean(AccountRepository.class, new AccountRepositoryAdapter());
+        registry.registerBean(AccountBusiness.class, new AccountBusiness());
+        registry.registerBean(AccountResource.class, new AccountResource());
+        registry.injectDependencies();
+
+        logger.info("In-memory H2 database started for testing.");
+
+        app = Javalin
+                .create(t -> {
+                    t.router.contextPath = "/api";
+                    t.http.defaultContentType = "application/json";
+                });
+        RegisterJavalinException.register(app);
+        app.addEndpoint(new Endpoint(HandlerType.valueOf("GET"), "/account/{identifier}", registry.getBean(AccountResource.class)::getAccountByIdentifier));
+        app.addEndpoint(new Endpoint(HandlerType.valueOf("POST"), "/account", registry.getBean(AccountResource.class)::createAccount));
+        app.start("localhost", 8081);
+        RestAssured.baseURI = "http://localhost";
+        RestAssured.port = 8081;
+        logger.info("Server started at http://localhost:8081");
+    }
+
+    @AfterAll
+    static void stopServer() {
+        if (app != null) {
+            app.stop();
+            logger.info("Test server finalized.");
+        }
+    }
+}
