@@ -14,32 +14,32 @@ import org.taxionline.core.domain.base.IdModelBase;
 @Entity
 public class Account extends IdModelBase {
 
-    @Column( nullable = false )
-    String name;
+    @Column(nullable = false)
+    private String name;
 
-    @Column( unique = true, nullable = false )
-    String email;
+    @Column(unique = true, nullable = false)
+    private String email;
 
-    @Column( unique = true, nullable = false )
-    String cpf;
+    @Column(unique = true, nullable = false)
+    private String cpf;
 
-    String carPlate;
+    private String carPlate;
 
-    boolean idPassenger;
+    private boolean idPassenger;
 
-    boolean isDriver;
+    private boolean isDriver;
 
-    @Column( nullable = false )
-    String password;
+    @Column(nullable = false)
+    private String password;
 
-    @Column( nullable = false )
-    String password_algorithm;
+    @Column(nullable = false)
+    private String password_algorithm;
 
     @Builder
-    public Account( String name, String email, String cpf, String carPlate, boolean idPassenger, boolean isDriver, String password, String password_algorithm ) {
-        this.name = name;
-        this.email = email;
-        this.cpf = cpf;
+    public Account(String name, String email, String cpf, String carPlate, boolean idPassenger, boolean isDriver, String password, String password_algorithm) {
+        this.name = new Name(name).getValue();
+        this.email = new Email(email).getValue();
+        this.cpf = new CPF(cpf).getValue();
         this.carPlate = carPlate;
         this.idPassenger = idPassenger;
         this.isDriver = isDriver;
