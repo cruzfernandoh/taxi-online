@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.taxionline.core.business.account.AccountBusiness;
 import org.taxionline.core.domain.account.AccountDTO;
 import org.taxionline.core.domain.account.CreateAccountDTO;
-import org.taxionline.di.BeanInjection;
+import org.taxionline.config.di.BeanInjection;
 
 @ValidateOnExecution
 public class AccountResource {

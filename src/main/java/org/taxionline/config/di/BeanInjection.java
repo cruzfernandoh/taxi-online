@@ -1,4 +1,4 @@
-package org.taxionline.di;
+package org.taxionline.config.di;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

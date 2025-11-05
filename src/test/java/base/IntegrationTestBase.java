@@ -1,8 +1,6 @@
 package base;
 
 import io.javalin.Javalin;
-import io.javalin.http.HandlerType;
-import io.javalin.router.Endpoint;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -11,9 +9,9 @@ import org.slf4j.LoggerFactory;
 import org.taxionline.adapter.inboud.AccountResource;
 import org.taxionline.adapter.outbound.AccountRepositoryAdapter;
 import org.taxionline.config.dao.DataSourceManager;
-import org.taxionline.config.handler.RegisterJavalinException;
 import org.taxionline.core.business.account.AccountBusiness;
-import org.taxionline.di.BeanRegistry;
+import org.taxionline.config.di.BeanRegistry;
+import org.taxionline.config.javalin.JavalinConfig;
 import org.taxionline.port.account.AccountRepository;
 
 public abstract class IntegrationTestBase {
@@ -38,14 +36,9 @@ public abstract class IntegrationTestBase {
 
         logger.info("In-memory H2 database started for testing.");
 
-        app = Javalin
-                .create(t -> {
-                    t.router.contextPath = "/api";
-                    t.http.defaultContentType = "application/json";
-                });
-        RegisterJavalinException.register(app);
-        app.addEndpoint(new Endpoint(HandlerType.valueOf("GET"), "/account/{identifier}", registry.getBean(AccountResource.class)::getAccountByIdentifier));
-        app.addEndpoint(new Endpoint(HandlerType.valueOf("POST"), "/account", registry.getBean(AccountResource.class)::createAccount));
+        app = JavalinConfig.createJavalin();
+        JavalinConfig.registerExceptions(app);
+        JavalinConfig.registerEndpoints(app, registry);
         app.start("localhost", 8081);
         RestAssured.baseURI = "http://localhost";
         RestAssured.port = 8081;

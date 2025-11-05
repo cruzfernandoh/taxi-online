@@ -4,7 +4,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.TypedQuery;
 import org.taxionline.config.dao.DataSourceManager;
-import org.taxionline.di.BeanInjection;
+import org.taxionline.config.di.BeanInjection;
 
 import java.lang.reflect.ParameterizedType;
 import java.sql.SQLException;

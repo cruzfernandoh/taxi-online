@@ -6,7 +6,7 @@ import org.taxionline.config.exception.ResourceNotFoundException;
 import org.taxionline.core.domain.account.Account;
 import org.taxionline.core.domain.account.AccountDTO;
 import org.taxionline.core.domain.account.CreateAccountDTO;
-import org.taxionline.di.BeanInjection;
+import org.taxionline.config.di.BeanInjection;
 import org.taxionline.port.account.AccountRepository;
 
 import java.util.regex.Pattern;

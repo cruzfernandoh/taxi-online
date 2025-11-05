@@ -1,4 +1,4 @@
-package org.taxionline.di;
+package org.taxionline.config.di;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
