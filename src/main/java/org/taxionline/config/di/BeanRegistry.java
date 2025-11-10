@@ -2,15 +2,15 @@ package org.taxionline.config.di;
 
 import org.taxionline.adapter.inboud.AccountResource;
 import org.taxionline.adapter.inboud.RideResource;
-import org.taxionline.adapter.outbound.AccountRepositoryAdapter;
+import org.taxionline.adapter.outbound.account.AccountRepositoryAdapter;
 import org.taxionline.adapter.outbound.ride.RideRepositoryAdapter;
 import org.taxionline.config.dao.DataSourceManager;
 import org.taxionline.core.business.account.AccountBusiness;
 import org.taxionline.core.business.ride.RideBusiness;
 import org.taxionline.mapper.account.AccountMapper;
 import org.taxionline.mapper.ride.RideMapper;
-import org.taxionline.port.account.AccountRepository;
-import org.taxionline.port.ride.RideRepository;
+import org.taxionline.port.outbound.account.AccountRepository;
+import org.taxionline.port.outbound.ride.RideRepository;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;

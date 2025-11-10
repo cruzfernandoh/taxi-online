@@ -1,4 +1,4 @@
-package org.taxionline.port.ride;
+package org.taxionline.port.outbound.ride;
 
 import org.taxionline.core.domain.ride.Ride;
 

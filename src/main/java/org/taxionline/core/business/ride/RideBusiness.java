@@ -6,8 +6,8 @@ import org.taxionline.config.exception.ResourceNotFoundException;
 import org.taxionline.core.domain.ride.CreateRideDTO;
 import org.taxionline.core.domain.ride.RideDTO;
 import org.taxionline.mapper.ride.RideMapper;
-import org.taxionline.port.account.AccountRepository;
-import org.taxionline.port.ride.RideRepository;
+import org.taxionline.port.outbound.account.AccountRepository;
+import org.taxionline.port.outbound.ride.RideRepository;
 
 public class RideBusiness {
 

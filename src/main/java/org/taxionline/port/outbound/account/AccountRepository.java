@@ -1,4 +1,4 @@
-package org.taxionline.port.account;
+package org.taxionline.port.outbound.account;
 
 import org.taxionline.core.domain.account.Account;
 

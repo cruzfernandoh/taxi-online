@@ -4,14 +4,14 @@ import base.IntegrationTestBase;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.taxionline.adapter.outbound.AccountRepositoryAdapter;
+import org.taxionline.adapter.outbound.account.AccountRepositoryAdapter;
 import org.taxionline.adapter.outbound.ride.RideRepositoryAdapter;
 import org.taxionline.core.business.account.AccountBusiness;
 import org.taxionline.core.domain.account.AccountDTO;
 import org.taxionline.core.domain.account.CreateAccountDTO;
 import org.taxionline.core.domain.ride.CreateRideDTO;
-import org.taxionline.port.account.AccountRepository;
-import org.taxionline.port.ride.RideRepository;
+import org.taxionline.port.outbound.account.AccountRepository;
+import org.taxionline.port.outbound.ride.RideRepository;
 
 import static org.hamcrest.CoreMatchers.*;
 

@@ -8,7 +8,7 @@ import org.taxionline.core.domain.account.Account;
 import org.taxionline.core.domain.account.AccountDTO;
 import org.taxionline.core.domain.account.CreateAccountDTO;
 import org.taxionline.mapper.account.AccountMapper;
-import org.taxionline.port.account.AccountRepository;
+import org.taxionline.port.outbound.account.AccountRepository;
 
 import java.util.regex.Pattern;
 

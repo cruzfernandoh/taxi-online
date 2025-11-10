@@ -1,4 +1,4 @@
-package org.taxionline.adapter.outbound;
+package org.taxionline.config.repository;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;

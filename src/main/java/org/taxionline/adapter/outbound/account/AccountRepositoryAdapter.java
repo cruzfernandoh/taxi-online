@@ -1,7 +1,8 @@
-package org.taxionline.adapter.outbound;
+package org.taxionline.adapter.outbound.account;
 
+import org.taxionline.config.repository.BaseRepository;
 import org.taxionline.core.domain.account.Account;
-import org.taxionline.port.account.AccountRepository;
+import org.taxionline.port.outbound.account.AccountRepository;
 
 import java.util.Optional;
 
