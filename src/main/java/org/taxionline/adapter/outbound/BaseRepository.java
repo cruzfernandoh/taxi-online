@@ -47,6 +47,10 @@ public abstract class BaseRepository<T> {
         });
     }
 
+    public void deleteAll() {
+        executeInTransaction(em -> em.createQuery("DELETE FROM " + entityClass.getSimpleName()).executeUpdate());
+    }
+
     public Optional<T> findById(Object id) throws SQLException {
         try (EntityManager em = manager.getEntityManager()) {
             T entity = em.find(entityClass, id);

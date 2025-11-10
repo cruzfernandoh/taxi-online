@@ -8,10 +8,11 @@ import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.ValidationException;
 import org.jetbrains.annotations.NotNull;
 import org.taxionline.adapter.inboud.AccountResource;
+import org.taxionline.adapter.inboud.RideResource;
+import org.taxionline.config.di.BeanRegistry;
 import org.taxionline.config.exception.DuplicateAttributeException;
 import org.taxionline.config.exception.ResourceNotFoundException;
 import org.taxionline.config.handler.ExceptionResponseBuilder;
-import org.taxionline.config.di.BeanRegistry;
 
 public class JavalinConfig {
 
@@ -26,6 +27,9 @@ public class JavalinConfig {
     public static void registerEndpoints(Javalin app, BeanRegistry registry) {
         app.addEndpoint(new Endpoint(HandlerType.valueOf("GET"), "/account/{identifier}", registry.getBean(AccountResource.class)::getAccountByIdentifier));
         app.addEndpoint(new Endpoint(HandlerType.valueOf("POST"), "/account", registry.getBean(AccountResource.class)::createAccount));
+
+        app.addEndpoint(new Endpoint(HandlerType.valueOf("GET"), "/ride/{identifier}", registry.getBean(RideResource.class)::getRideByIdentifier));
+        app.addEndpoint(new Endpoint(HandlerType.valueOf("POST"), "/ride", registry.getBean(RideResource.class)::requestRide));
     }
 
     public static Javalin createJavalin() {

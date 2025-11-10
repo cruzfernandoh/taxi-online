@@ -2,17 +2,12 @@ package base;
 
 import io.javalin.Javalin;
 import io.restassured.RestAssured;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.taxionline.adapter.inboud.AccountResource;
-import org.taxionline.adapter.outbound.AccountRepositoryAdapter;
 import org.taxionline.config.dao.DataSourceManager;
-import org.taxionline.core.business.account.AccountBusiness;
 import org.taxionline.config.di.BeanRegistry;
 import org.taxionline.config.javalin.JavalinConfig;
-import org.taxionline.port.account.AccountRepository;
 
 public abstract class IntegrationTestBase {
 
@@ -20,18 +15,24 @@ public abstract class IntegrationTestBase {
 
     protected static Javalin app;
 
+    protected static BeanRegistry registry;
+
+    protected static DataSourceManager manager;
+
     @BeforeAll
     static void startServer() {
+        if (app != null) {
+            logger.info("Server already running, skipping startup.");
+            return;
+        }
+
         logger.info("Initialize testing environment...");
 
-        DataSourceManager manager = new DataSourceManagerTest();
+        manager = new DataSourceManagerTest();
         manager.init();
 
-        BeanRegistry registry = new BeanRegistry();
-        registry.registerBean(DataSourceManager.class, manager);
-        registry.registerBean(AccountRepository.class, new AccountRepositoryAdapter());
-        registry.registerBean(AccountBusiness.class, new AccountBusiness());
-        registry.registerBean(AccountResource.class, new AccountResource());
+        registry = new BeanRegistry();
+        registry.registerAllBeans(manager);
         registry.injectDependencies();
 
         logger.info("In-memory H2 database started for testing.");
@@ -43,13 +44,5 @@ public abstract class IntegrationTestBase {
         RestAssured.baseURI = "http://localhost";
         RestAssured.port = 8081;
         logger.info("Server started at http://localhost:8081");
-    }
-
-    @AfterAll
-    static void stopServer() {
-        if (app != null) {
-            app.stop();
-            logger.info("Test server finalized.");
-        }
     }
 }

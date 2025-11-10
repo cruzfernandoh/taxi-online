@@ -3,14 +3,10 @@ package org.taxionline;
 import io.javalin.Javalin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.taxionline.adapter.inboud.AccountResource;
-import org.taxionline.adapter.outbound.AccountRepositoryAdapter;
 import org.taxionline.config.dao.DataSourceManager;
 import org.taxionline.config.dao.DataSourceManagerAdapter;
-import org.taxionline.core.business.account.AccountBusiness;
 import org.taxionline.config.di.BeanRegistry;
 import org.taxionline.config.javalin.JavalinConfig;
-import org.taxionline.port.account.AccountRepository;
 import org.taxionline.util.AppConfigUtils;
 
 public class TaxiOnlineMain {
@@ -23,10 +19,7 @@ public class TaxiOnlineMain {
         DataSourceManager adapter = new DataSourceManagerAdapter();
         adapter.init();
         BeanRegistry registry = new BeanRegistry();
-        registry.registerBean(DataSourceManager.class, adapter);
-        registry.registerBean(AccountRepository.class, new AccountRepositoryAdapter());
-        registry.registerBean(AccountBusiness.class, new AccountBusiness());
-        registry.registerBean(AccountResource.class, new AccountResource());
+        registry.registerAllBeans(adapter);
         registry.injectDependencies();
 
         Javalin app = JavalinConfig.createJavalin();

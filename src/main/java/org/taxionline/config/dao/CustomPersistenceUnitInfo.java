@@ -71,7 +71,8 @@ public class CustomPersistenceUnitInfo implements PersistenceUnitInfo {
 
     @Override
     public List<String> getManagedClassNames() {
-        return List.of("org.taxionline.core.domain.account.Account");
+        return List.of("org.taxionline.core.domain.account.Account",
+                "org.taxionline.core.domain.ride.Ride");
     }
 
     @Override
