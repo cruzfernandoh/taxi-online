@@ -1,4 +1,4 @@
-package base;
+package integration.base;
 
 import io.javalin.Javalin;
 import io.restassured.RestAssured;

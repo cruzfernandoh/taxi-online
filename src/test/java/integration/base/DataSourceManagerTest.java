@@ -1,4 +1,4 @@
-package base;
+package integration.base;
 
 import io.agroal.api.AgroalDataSource;
 import io.agroal.api.configuration.AgroalDataSourceConfiguration;

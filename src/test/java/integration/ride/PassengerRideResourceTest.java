@@ -1,6 +1,6 @@
-package ride;
+package integration.ride;
 
-import base.IntegrationTestBase;
+import integration.base.IntegrationTestBase;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

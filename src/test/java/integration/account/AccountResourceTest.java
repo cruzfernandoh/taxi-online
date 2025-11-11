@@ -1,6 +1,6 @@
-package account;
+package integration.account;
 
-import base.IntegrationTestBase;
+import integration.base.IntegrationTestBase;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.Test;
 import org.taxionline.core.domain.account.CreateAccountDTO;
