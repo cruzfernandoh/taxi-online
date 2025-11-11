@@ -2,6 +2,7 @@ package org.taxionline.mapper.ride;
 
 import org.taxionline.config.di.BeanInjection;
 import org.taxionline.core.domain.account.Account;
+import org.taxionline.core.domain.position.Position;
 import org.taxionline.core.domain.ride.CreateRideDTO;
 import org.taxionline.core.domain.ride.Ride;
 import org.taxionline.core.domain.ride.RideDTO;
@@ -10,6 +11,7 @@ import org.taxionline.mapper.BaseMapper;
 import org.taxionline.mapper.account.AccountMapper;
 import org.taxionline.util.DateUtils;
 
+import java.util.List;
 import java.util.Optional;
 
 public class RideMapper implements BaseMapper<Ride, RideDTO> {
@@ -38,6 +40,26 @@ public class RideMapper implements BaseMapper<Ride, RideDTO> {
                         .date(Optional.ofNullable(t.getDate()).map(DateUtils::formatDate).orElse(null))
                         .status(t.getStatus())
                         .distance(t.getDistance())
+                        .build())
+                .orElse(null);
+    }
+
+    public RideDTO toDTO(Ride ride, List<Position> positions) {
+        return Optional.ofNullable(ride)
+                .map(t -> RideDTO.builder()
+                        .identifier(t.getIdentifier())
+                        .passenger(accountMapper.toDTO(t.getPassenger()))
+                        .driver(accountMapper.toDTO(t.getDriver()))
+                        .fare(t.getFare())
+                        .distance(t.getDistance())
+                        .toLat(t.getTo().getLat())
+                        .fromLat(t.getFrom().getLat())
+                        .toLon(t.getTo().getLon())
+                        .fromLon(t.getFrom().getLon())
+                        .date(Optional.ofNullable(t.getDate()).map(DateUtils::formatDate).orElse(null))
+                        .status(t.getStatus())
+                        .distance(ride.calculateDistance(positions))
+                        .positions(positions)
                         .build())
                 .orElse(null);
     }

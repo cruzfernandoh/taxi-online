@@ -5,12 +5,14 @@ import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.taxionline.adapter.outbound.account.AccountRepositoryAdapter;
+import org.taxionline.adapter.outbound.position.PositionRepositoryAdapter;
 import org.taxionline.adapter.outbound.ride.RideRepositoryAdapter;
 import org.taxionline.core.business.account.AccountBusiness;
 import org.taxionline.core.domain.account.AccountDTO;
 import org.taxionline.core.domain.account.CreateAccountDTO;
 import org.taxionline.core.domain.ride.CreateRideDTO;
 import org.taxionline.port.outbound.account.AccountRepository;
+import org.taxionline.port.outbound.position.PositionRepository;
 import org.taxionline.port.outbound.ride.RideRepository;
 
 import static org.hamcrest.CoreMatchers.*;
@@ -27,7 +29,9 @@ public class PassengerRideResourceTest extends IntegrationTestBase {
     @BeforeEach
     void cleanDataBase() {
         var accountRepository = (AccountRepositoryAdapter) IntegrationTestBase.registry.getBean(AccountRepository.class);
+        var positionRepository = (PositionRepositoryAdapter) IntegrationTestBase.registry.getBean(PositionRepository.class);
         var rideRepository = (RideRepositoryAdapter) IntegrationTestBase.registry.getBean(RideRepository.class);
+        positionRepository.deleteAll();
         rideRepository.deleteAll();
         accountRepository.deleteAll();
     }

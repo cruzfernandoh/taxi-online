@@ -5,8 +5,11 @@ import jakarta.validation.ValidationException;
 import lombok.*;
 import org.taxionline.core.domain.account.Account;
 import org.taxionline.core.domain.base.IdModelBase;
+import org.taxionline.core.domain.position.Position;
+import org.taxionline.util.CalculateDistanceUtils;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -54,6 +57,16 @@ public class Ride extends IdModelBase {
     public void start() {
         if (!RideStatus.ACCEPTED.equals(this.getStatus())) throw new ValidationException("Ride is not ready to start");
         this.setStatus(RideStatus.IN_PROGRESS);
+    }
+
+    public double calculateDistance(List<Position> positions) {
+        var distance = 0.0;
+        for (int i = 0; i < positions.size() - 1; i++) {
+            var pos = positions.get(i);
+            var next = positions.get(i + 1);
+            distance += CalculateDistanceUtils.calculate(pos.getCoordinate(), next.getCoordinate());
+        }
+        return distance;
     }
 
     @Builder

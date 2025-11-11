@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.taxionline.core.domain.account.AccountDTO;
+import org.taxionline.core.domain.position.Position;
+
+import java.util.Collection;
 
 @Getter
 @Setter
@@ -33,8 +36,11 @@ public class RideDTO {
 
     String date;
 
+    Collection<Position> positions;
+
     @Builder
-    public RideDTO(String identifier, AccountDTO passenger, AccountDTO driver, RideStatus status, Double fare, Double distance, Double fromLat, Double fromLon, Double toLat, Double toLon, String date) {
+    public RideDTO(String identifier, AccountDTO passenger, AccountDTO driver, RideStatus status, Double fare,
+                   Double distance, Double fromLat, Double fromLon, Double toLat, Double toLon, String date, Collection<Position> positions) {
         this.identifier = identifier;
         this.passenger = passenger;
         this.driver = driver;
@@ -46,5 +52,6 @@ public class RideDTO {
         this.toLat = toLat;
         this.toLon = toLon;
         this.date = date;
+        this.positions = positions;
     }
 }

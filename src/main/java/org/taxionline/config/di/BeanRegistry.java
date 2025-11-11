@@ -3,13 +3,16 @@ package org.taxionline.config.di;
 import org.taxionline.adapter.inboud.AccountResource;
 import org.taxionline.adapter.inboud.RideResource;
 import org.taxionline.adapter.outbound.account.AccountRepositoryAdapter;
+import org.taxionline.adapter.outbound.position.PositionRepositoryAdapter;
 import org.taxionline.adapter.outbound.ride.RideRepositoryAdapter;
 import org.taxionline.config.dao.DataSourceManager;
 import org.taxionline.core.business.account.AccountBusiness;
+import org.taxionline.core.business.position.PositionBusiness;
 import org.taxionline.core.business.ride.RideBusiness;
 import org.taxionline.mapper.account.AccountMapper;
 import org.taxionline.mapper.ride.RideMapper;
 import org.taxionline.port.outbound.account.AccountRepository;
+import org.taxionline.port.outbound.position.PositionRepository;
 import org.taxionline.port.outbound.ride.RideRepository;
 
 import java.lang.reflect.Field;
@@ -31,6 +34,9 @@ public class BeanRegistry {
         registerBean(RideBusiness.class, new RideBusiness());
         registerBean(RideResource.class, new RideResource());
         registerBean(RideMapper.class, new RideMapper());
+
+        registerBean(PositionRepository.class, new PositionRepositoryAdapter());
+        registerBean(PositionBusiness.class, new PositionBusiness());
     }
 
     private <T> void registerBean(Class<T> type, T instance) {

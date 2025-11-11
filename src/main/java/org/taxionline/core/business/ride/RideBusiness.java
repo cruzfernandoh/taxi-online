@@ -6,9 +6,9 @@ import org.taxionline.config.exception.ResourceNotFoundException;
 import org.taxionline.core.domain.ride.CreateRideDTO;
 import org.taxionline.core.domain.ride.Ride;
 import org.taxionline.core.domain.ride.RideDTO;
-import org.taxionline.core.domain.ride.RideStatus;
 import org.taxionline.mapper.ride.RideMapper;
 import org.taxionline.port.outbound.account.AccountRepository;
+import org.taxionline.port.outbound.position.PositionRepository;
 import org.taxionline.port.outbound.ride.RideRepository;
 
 public class RideBusiness {
@@ -18,6 +18,9 @@ public class RideBusiness {
 
     @BeanInjection
     AccountRepository accountRepository;
+
+    @BeanInjection
+    PositionRepository positionRepository;
 
     @BeanInjection
     RideMapper mapper;
@@ -33,7 +36,8 @@ public class RideBusiness {
 
     public RideDTO getRide(String identifier) {
         var ride = findRideByIdentifier(identifier);
-        return mapper.toDTO(ride);
+        var positions = positionRepository.getPositionByRide(ride);
+        return mapper.toDTO(ride, positions);
     }
 
     public void acceptRide(String rideIdentifier, String driverIdentifier) {
@@ -51,11 +55,6 @@ public class RideBusiness {
         var ride = findRideByIdentifier(identifier);
         ride.start();
         repository.update(ride);
-    }
-
-    public void updatePosition(String identifier, Double lat, Double lon) {
-        var ride = findRideByIdentifier(identifier);
-        if (!RideStatus.IN_PROGRESS.equals(ride.getStatus())) throw new ValidationException("Ride is not in progress");
     }
 
     private Ride findRideByIdentifier(String identifier) {
