@@ -2,7 +2,10 @@ package org.taxionline.core.domain.ride;
 
 import jakarta.persistence.*;
 import jakarta.validation.ValidationException;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.taxionline.core.domain.account.Account;
 import org.taxionline.core.domain.base.IdModelBase;
 import org.taxionline.core.domain.position.Position;
@@ -12,7 +15,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -50,13 +52,23 @@ public class Ride extends IdModelBase {
     public void accept(Account driver) {
         if (!RideStatus.REQUESTED.equals(this.getStatus()))
             throw new ValidationException("Ride is not valid to accept");
-        this.setDriver(driver);
-        this.setStatus(RideStatus.ACCEPTED);
+        this.driver = driver;
+        this.status = RideStatus.ACCEPTED;
     }
 
     public void start() {
         if (!RideStatus.ACCEPTED.equals(this.getStatus())) throw new ValidationException("Ride is not ready to start");
-        this.setStatus(RideStatus.IN_PROGRESS);
+        this.status = RideStatus.IN_PROGRESS;
+    }
+
+    public void finish(List<Position> positions) {
+        if (!RideStatus.IN_PROGRESS.equals(this.getStatus()))
+            throw new ValidationException("Ride is not in valid status to finish");
+        var distance = calculateDistance(positions);
+        var fare = distance * 2.1;
+        this.distance = distance;
+        this.fare = fare;
+        this.status = RideStatus.COMPLETED;
     }
 
     public double calculateDistance(List<Position> positions) {

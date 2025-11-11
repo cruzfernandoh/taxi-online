@@ -57,6 +57,13 @@ public class RideBusiness {
         repository.update(ride);
     }
 
+    public void finishRide(String identifier) {
+        var ride = findRideByIdentifier(identifier);
+        var positions = positionRepository.getPositionByRide(ride);
+        ride.finish(positions);
+        repository.update(ride);
+    }
+
     private Ride findRideByIdentifier(String identifier) {
         return repository.getRide(identifier)
                 .orElseThrow(() -> new ResourceNotFoundException(String.format("Ride with id [%s] not found", identifier)));
