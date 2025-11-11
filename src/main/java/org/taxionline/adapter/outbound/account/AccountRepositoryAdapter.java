@@ -2,6 +2,8 @@ package org.taxionline.adapter.outbound.account;
 
 import org.taxionline.config.repository.BaseRepository;
 import org.taxionline.core.domain.account.Account;
+import org.taxionline.core.domain.vo.CPF;
+import org.taxionline.core.domain.vo.Email;
 import org.taxionline.port.outbound.account.AccountRepository;
 
 import java.util.Optional;
@@ -15,12 +17,12 @@ public class AccountRepositoryAdapter extends BaseRepository<Account> implements
 
     @Override
     public boolean existsAccountWithEmail(String email) {
-        return count("email = ?1", email) > 0;
+        return count("email = ?1", new Email(email)) > 0;
     }
 
     @Override
     public boolean existsAccountWithCpf(String cpf) {
-        return count("cpf = ?1", cpf) > 0;
+        return count("cpf = ?1", new CPF(cpf)) > 0;
     }
 
     @Override

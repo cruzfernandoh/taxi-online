@@ -1,0 +1,109 @@
+package ride;
+
+import base.IntegrationTestBase;
+import io.restassured.RestAssured;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.taxionline.adapter.outbound.account.AccountRepositoryAdapter;
+import org.taxionline.adapter.outbound.ride.RideRepositoryAdapter;
+import org.taxionline.core.business.account.AccountBusiness;
+import org.taxionline.core.domain.account.AccountDTO;
+import org.taxionline.core.domain.account.CreateAccountDTO;
+import org.taxionline.core.domain.ride.CreateRideDTO;
+import org.taxionline.core.domain.ride.RideStatus;
+import org.taxionline.port.outbound.account.AccountRepository;
+import org.taxionline.port.outbound.ride.RideRepository;
+
+import static org.hamcrest.CoreMatchers.is;
+
+public class StartRideResourceTest extends IntegrationTestBase {
+
+    private AccountDTO createAccount(boolean b, String carPlate, String cpf) {
+        var accountBusiness = IntegrationTestBase.registry.getBean(AccountBusiness.class);
+        var dto = new CreateAccountDTO("Gon Cruz", cpf, "gon" + Math.random() + "@gmail.com", carPlate, !b, b, "123456", "bcrypt");
+        return accountBusiness.createAccount(dto);
+    }
+
+    @BeforeEach
+    void cleanDataBase() {
+        var accountRepository = (AccountRepositoryAdapter) IntegrationTestBase.registry.getBean(AccountRepository.class);
+        var rideRepository = (RideRepositoryAdapter) IntegrationTestBase.registry.getBean(RideRepository.class);
+        rideRepository.deleteAll();
+        accountRepository.deleteAll();
+    }
+
+    @Test
+    public void testStartRide_with200StatusCode() {
+        var passenger = createAccount(false, null, "08102622660");
+        var rideDTO = new CreateRideDTO(passenger.getIdentifier(), 20.0, 20.0, 20.0, 20.0);
+        var rideIdentifier = RestAssured.given()
+                .when()
+                .body(rideDTO)
+                .header("Content-Type", "application/json")
+                .post("/api/ride")
+                .getBody().path("identifier");
+
+        var driver = createAccount(true, "PVH3230", "25494614018");
+        RestAssured.given()
+                .when()
+                .body(rideDTO)
+                .header("Content-Type", "application/json")
+                .post("/api/ride/accept-ride/" + rideIdentifier + "/" + driver.getIdentifier())
+                .then()
+                .statusCode(200);
+
+        RestAssured.given()
+                .when()
+                .body(rideDTO)
+                .header("Content-Type", "application/json")
+                .post("/api/ride/start-ride/" + rideIdentifier)
+                .then()
+                .statusCode(200);
+
+        RestAssured.given()
+                .when()
+                .get("/api/ride/" + rideIdentifier)
+                .then()
+                .statusCode(200)
+                .body("identifier", is(rideIdentifier))
+                .body("status", is(RideStatus.IN_PROGRESS.name()));
+    }
+
+    @Test
+    public void testStartRide_with400StatusCode() {
+        var passenger = createAccount(false, null, "08102622660");
+        var rideDTO = new CreateRideDTO(passenger.getIdentifier(), 20.0, 20.0, 20.0, 20.0);
+        var rideIdentifier = RestAssured.given()
+                .when()
+                .body(rideDTO)
+                .header("Content-Type", "application/json")
+                .post("/api/ride")
+                .getBody().path("identifier");
+
+        var driver = createAccount(true, "PVH3230", "25494614018");
+        RestAssured.given()
+                .when()
+                .body(rideDTO)
+                .header("Content-Type", "application/json")
+                .post("/api/ride/accept-ride/" + rideIdentifier + "/" + driver.getIdentifier())
+                .then()
+                .statusCode(200);
+
+        RestAssured.given()
+                .when()
+                .body(rideDTO)
+                .header("Content-Type", "application/json")
+                .post("/api/ride/start-ride/" + rideIdentifier)
+                .then()
+                .statusCode(200);
+
+        RestAssured.given()
+                .when()
+                .body(rideDTO)
+                .header("Content-Type", "application/json")
+                .post("/api/ride/start-ride/" + rideIdentifier)
+                .then()
+                .statusCode(400)
+                .body("message", is("Ride is not ready to start"));
+    }
+}

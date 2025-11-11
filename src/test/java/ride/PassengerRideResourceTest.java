@@ -15,12 +15,12 @@ import org.taxionline.port.outbound.ride.RideRepository;
 
 import static org.hamcrest.CoreMatchers.*;
 
-public class RideResourceTest extends IntegrationTestBase {
+public class PassengerRideResourceTest extends IntegrationTestBase {
 
 
-    private AccountDTO createAccount(boolean isDriver, String carPlate) {
+    private AccountDTO createAccount(boolean b, String carPlate) {
         var accountBusiness = IntegrationTestBase.registry.getBean(AccountBusiness.class);
-        var dto = new CreateAccountDTO("Gon Cruz", "08102622660", "gon" + Math.random() + "@gmail.com", carPlate, false, isDriver, "123456", "bcrypt");
+        var dto = new CreateAccountDTO("Gon Cruz", "08102622660", "gon" + Math.random() + "@gmail.com", carPlate, !b, b, "123456", "bcrypt");
         return accountBusiness.createAccount(dto);
     }
 

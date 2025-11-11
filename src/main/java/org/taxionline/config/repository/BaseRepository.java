@@ -34,7 +34,7 @@ public abstract class BaseRepository<T> {
         executeInTransaction(em -> em.persist(entity));
     }
 
-    public void update(T entity) {
+    public void merge(T entity) {
         executeInTransaction(em -> em.merge(entity));
     }
 

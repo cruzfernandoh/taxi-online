@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.taxionline.core.domain.base.IdModelBase;
+import org.taxionline.core.domain.vo.CPF;
+import org.taxionline.core.domain.vo.Email;
+import org.taxionline.core.domain.vo.Name;
 
 @Getter
 @Setter
@@ -15,17 +18,17 @@ import org.taxionline.core.domain.base.IdModelBase;
 public class Account extends IdModelBase {
 
     @Column(nullable = false)
-    private String name;
+    private Name name;
 
     @Column(unique = true, nullable = false)
-    private String email;
+    private Email email;
 
     @Column(unique = true, nullable = false)
-    private String cpf;
+    private CPF cpf;
 
     private String carPlate;
 
-    private boolean idPassenger;
+    private boolean isPassenger;
 
     private boolean isDriver;
 
@@ -36,12 +39,12 @@ public class Account extends IdModelBase {
     private String password_algorithm;
 
     @Builder
-    public Account(String name, String email, String cpf, String carPlate, boolean idPassenger, boolean isDriver, String password, String password_algorithm) {
-        this.name = new Name(name).getValue();
-        this.email = new Email(email).getValue();
-        this.cpf = new CPF(cpf).getValue();
+    public Account(String name, String email, String cpf, String carPlate, boolean isPassenger, boolean isDriver, String password, String password_algorithm) {
+        this.name = new Name(name);
+        this.email = new Email(email);
+        this.cpf = new CPF(cpf);
         this.carPlate = carPlate;
-        this.idPassenger = idPassenger;
+        this.isPassenger = isPassenger;
         this.isDriver = isDriver;
         this.password = password;
         this.password_algorithm = password_algorithm;

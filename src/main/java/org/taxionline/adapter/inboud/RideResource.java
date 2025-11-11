@@ -30,4 +30,17 @@ public class RideResource {
         ctx.json(response);
     }
 
+    public void acceptRide(Context ctx) {
+        var rideIdentifier = ctx.pathParam("ride-identifier");
+        var driverIdentifier = ctx.pathParam("driver-identifier");
+        logger.info("Driver {} accepting ride {}", rideIdentifier, driverIdentifier);
+        business.acceptRide(rideIdentifier, driverIdentifier);
+    }
+
+    public void startRide(Context ctx) {
+        var identifier = ctx.pathParam("identifier");
+        logger.info("Starting ride {}", identifier);
+        business.startRide(identifier);
+    }
+
 }
