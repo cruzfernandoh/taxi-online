@@ -1,18 +1,14 @@
-package org.taxionline.core.domain.account;
+package org.taxionline.core.domain.vo;
 
 import jakarta.validation.ValidationException;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.util.regex.Pattern;
 
 @Getter
-@Setter
-@NoArgsConstructor
 public class CPF {
 
-    private String value;
+    private final String value;
 
     public CPF(String value) {
         if (value == null || value.trim().isBlank())

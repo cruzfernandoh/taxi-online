@@ -30,6 +30,8 @@ public class JavalinConfig {
 
         app.addEndpoint(new Endpoint(HandlerType.valueOf("GET"), "/ride/{identifier}", registry.getBean(RideResource.class)::getRideByIdentifier));
         app.addEndpoint(new Endpoint(HandlerType.valueOf("POST"), "/ride", registry.getBean(RideResource.class)::requestRide));
+        app.addEndpoint(new Endpoint(HandlerType.valueOf("POST"), "/ride/accept-ride/{ride-identifier}/{driver-identifier}", registry.getBean(RideResource.class)::acceptRide));
+        app.addEndpoint(new Endpoint(HandlerType.valueOf("POST"), "/ride/start-ride/{identifier}", registry.getBean(RideResource.class)::startRide));
     }
 
     public static Javalin createJavalin() {
