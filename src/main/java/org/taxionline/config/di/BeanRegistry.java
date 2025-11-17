@@ -6,7 +6,9 @@ import org.taxionline.adapter.outbound.account.AccountRepositoryAdapter;
 import org.taxionline.adapter.outbound.position.PositionRepositoryAdapter;
 import org.taxionline.adapter.outbound.ride.RideRepositoryAdapter;
 import org.taxionline.config.dao.DataSourceManager;
+import org.taxionline.config.mediator.Mediator;
 import org.taxionline.core.business.account.AccountBusiness;
+import org.taxionline.core.business.payment.ProcessPaymentBusiness;
 import org.taxionline.core.business.position.PositionBusiness;
 import org.taxionline.core.business.ride.RideBusiness;
 import org.taxionline.mapper.account.AccountMapper;
@@ -22,7 +24,8 @@ import java.util.Map;
 public class BeanRegistry {
     private final Map<Class<?>, Object> beans = new HashMap<>();
 
-    public void registerAllBeans(DataSourceManager adapter) {
+    public void registerAllBeans(DataSourceManager adapter, Mediator mediator) {
+        registerBean(Mediator.class, mediator);
         registerBean(DataSourceManager.class, adapter);
 
         registerBean(AccountRepository.class, new AccountRepositoryAdapter());
@@ -37,6 +40,8 @@ public class BeanRegistry {
 
         registerBean(PositionRepository.class, new PositionRepositoryAdapter());
         registerBean(PositionBusiness.class, new PositionBusiness());
+
+        registerBean(ProcessPaymentBusiness.class, new ProcessPaymentBusiness());
     }
 
     private <T> void registerBean(Class<T> type, T instance) {

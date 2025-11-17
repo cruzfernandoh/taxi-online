@@ -3,6 +3,8 @@ package org.taxionline.core.business.ride;
 import jakarta.validation.ValidationException;
 import org.taxionline.config.di.BeanInjection;
 import org.taxionline.config.exception.ResourceNotFoundException;
+import org.taxionline.config.mediator.Mediator;
+import org.taxionline.core.domain.event.RideCompletedEvent;
 import org.taxionline.core.domain.ride.CreateRideDTO;
 import org.taxionline.core.domain.ride.Ride;
 import org.taxionline.core.domain.ride.RideDTO;
@@ -21,6 +23,9 @@ public class RideBusiness {
 
     @BeanInjection
     PositionRepository positionRepository;
+
+    @BeanInjection
+    Mediator mediator;
 
     @BeanInjection
     RideMapper mapper;
@@ -62,6 +67,7 @@ public class RideBusiness {
         var positions = positionRepository.getPositionByRide(ride);
         ride.finish(positions);
         repository.update(ride);
+        mediator.notify(RideCompletedEvent.eventName, new RideCompletedEvent(ride.getIdentifier(), ride.getFare()));
     }
 
     private Ride findRideByIdentifier(String identifier) {
