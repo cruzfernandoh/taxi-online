@@ -1,9 +1,9 @@
 package org.taxionline.adapter.outbound.account;
 
-import org.taxionline.config.repository.BaseRepository;
-import org.taxionline.core.domain.account.Account;
-import org.taxionline.core.domain.vo.CPF;
-import org.taxionline.core.domain.vo.Email;
+import org.taxionline.infra.repository.BaseRepository;
+import org.taxionline.domain.entity.account.Account;
+import org.taxionline.domain.entity.vo.CPF;
+import org.taxionline.domain.entity.vo.Email;
 import org.taxionline.port.outbound.account.AccountRepository;
 
 import java.util.Optional;

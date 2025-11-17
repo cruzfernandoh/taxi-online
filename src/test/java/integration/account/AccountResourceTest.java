@@ -3,7 +3,7 @@ package integration.account;
 import integration.base.IntegrationTestBase;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.Test;
-import org.taxionline.core.domain.account.CreateAccountDTO;
+import org.taxionline.dto.account.CreateAccountDTO;
 
 import java.util.UUID;
 

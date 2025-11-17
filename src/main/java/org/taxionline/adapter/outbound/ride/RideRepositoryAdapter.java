@@ -1,9 +1,9 @@
 package org.taxionline.adapter.outbound.ride;
 
-import org.taxionline.config.repository.BaseRepository;
-import org.taxionline.core.domain.account.Account;
-import org.taxionline.core.domain.ride.Ride;
-import org.taxionline.core.domain.ride.RideStatus;
+import org.taxionline.infra.repository.BaseRepository;
+import org.taxionline.domain.entity.account.Account;
+import org.taxionline.domain.entity.ride.Ride;
+import org.taxionline.domain.entity.ride.RideStatus;
 import org.taxionline.port.outbound.ride.RideRepository;
 
 import java.util.List;

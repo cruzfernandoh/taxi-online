@@ -1,8 +1,8 @@
 package org.taxionline.mapper.account;
 
-import org.taxionline.core.domain.account.Account;
-import org.taxionline.core.domain.account.AccountDTO;
-import org.taxionline.core.domain.account.CreateAccountDTO;
+import org.taxionline.domain.entity.account.Account;
+import org.taxionline.dto.account.AccountDTO;
+import org.taxionline.dto.account.CreateAccountDTO;
 import org.taxionline.mapper.BaseMapper;
 
 import java.util.Optional;

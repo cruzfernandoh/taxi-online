@@ -1,12 +1,12 @@
 package org.taxionline.mapper.ride;
 
-import org.taxionline.config.di.BeanInjection;
-import org.taxionline.core.domain.account.Account;
-import org.taxionline.core.domain.position.Position;
-import org.taxionline.core.domain.ride.CreateRideDTO;
-import org.taxionline.core.domain.ride.Ride;
-import org.taxionline.core.domain.ride.RideDTO;
-import org.taxionline.core.domain.ride.RideStatus;
+import org.taxionline.infra.di.BeanInjection;
+import org.taxionline.domain.entity.account.Account;
+import org.taxionline.domain.entity.position.Position;
+import org.taxionline.dto.ride.CreateRideDTO;
+import org.taxionline.domain.entity.ride.Ride;
+import org.taxionline.dto.ride.RideDTO;
+import org.taxionline.domain.entity.ride.RideStatus;
 import org.taxionline.mapper.BaseMapper;
 import org.taxionline.mapper.account.AccountMapper;
 import org.taxionline.util.DateUtils;
@@ -58,7 +58,7 @@ public class RideMapper implements BaseMapper<Ride, RideDTO> {
                         .fromLon(t.getFrom().getLon())
                         .date(Optional.ofNullable(t.getDate()).map(DateUtils::formatDate).orElse(null))
                         .status(t.getStatus())
-                        .distance(ride.calculateDistance(positions))
+                        .distance(null == t.getDistance() ? t.calculateDistance(positions) : t.getDistance())
                         .positions(positions)
                         .build())
                 .orElse(null);

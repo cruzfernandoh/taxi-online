@@ -1,7 +1,7 @@
 package org.taxionline.port.outbound.position;
 
-import org.taxionline.core.domain.position.Position;
-import org.taxionline.core.domain.ride.Ride;
+import org.taxionline.domain.entity.position.Position;
+import org.taxionline.domain.entity.ride.Ride;
 
 import java.util.List;
 

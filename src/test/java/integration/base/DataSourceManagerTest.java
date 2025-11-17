@@ -8,8 +8,8 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.taxionline.config.dao.CustomPersistenceUnitInfo;
-import org.taxionline.config.dao.DataSourceManager;
+import org.taxionline.infra.dao.CustomPersistenceUnitInfo;
+import org.taxionline.infra.dao.DataSourceManager;
 import org.taxionline.util.AppConfigUtils;
 
 import java.sql.SQLException;

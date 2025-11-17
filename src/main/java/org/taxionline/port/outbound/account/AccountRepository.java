@@ -1,6 +1,6 @@
 package org.taxionline.port.outbound.account;
 
-import org.taxionline.core.domain.account.Account;
+import org.taxionline.domain.entity.account.Account;
 
 import java.util.Optional;
 

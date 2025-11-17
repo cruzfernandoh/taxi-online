@@ -1,7 +1,7 @@
 package org.taxionline.port.outbound.ride;
 
-import org.taxionline.core.domain.account.Account;
-import org.taxionline.core.domain.ride.Ride;
+import org.taxionline.domain.entity.account.Account;
+import org.taxionline.domain.entity.ride.Ride;
 
 import java.util.Optional;
 

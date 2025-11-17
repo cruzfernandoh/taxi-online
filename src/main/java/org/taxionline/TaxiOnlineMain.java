@@ -1,15 +1,13 @@
 package org.taxionline;
 
-import io.javalin.Javalin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.taxionline.config.dao.DataSourceManager;
-import org.taxionline.config.dao.DataSourceManagerAdapter;
-import org.taxionline.config.di.BeanRegistry;
-import org.taxionline.config.javalin.JavalinConfig;
-import org.taxionline.config.mediator.Mediator;
-import org.taxionline.core.business.payment.ProcessPaymentBusiness;
-import org.taxionline.core.domain.event.RideCompletedEvent;
+import org.taxionline.infra.dao.DataSourceManagerAdapter;
+import org.taxionline.infra.di.BeanRegistry;
+import org.taxionline.infra.javalin.JavalinConfig;
+import org.taxionline.infra.mediator.Mediator;
+import org.taxionline.domain.business.payment.ProcessPaymentBusiness;
+import org.taxionline.domain.entity.event.RideCompletedEvent;
 import org.taxionline.util.AppConfigUtils;
 import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
@@ -24,17 +22,17 @@ public class TaxiOnlineMain {
         var config = (AppConfigUtils) yaml.load(TaxiOnlineMain.class.getClassLoader().getResourceAsStream("config.yaml"));
         logger.info("Application config success loaded: {}", config.getApp().getName());
 
-        DataSourceManager adapter = new DataSourceManagerAdapter();
+        var adapter = new DataSourceManagerAdapter();
         adapter.init(config);
 
-        Mediator mediator = new Mediator();
+        var mediator = new Mediator();
         mediator.register(RideCompletedEvent.eventName, (data) -> new ProcessPaymentBusiness().processPayment((RideCompletedEvent) data));
 
-        BeanRegistry registry = new BeanRegistry();
+        var registry = new BeanRegistry();
         registry.registerAllBeans(adapter, mediator);
         registry.injectDependencies();
 
-        Javalin app = JavalinConfig.createJavalin();
+        var app = JavalinConfig.createJavalin();
         JavalinConfig.registerExceptions(app);
         JavalinConfig.registerEndpoints(app, registry);
         app.start("0.0.0.0", config.getServer().getPort());

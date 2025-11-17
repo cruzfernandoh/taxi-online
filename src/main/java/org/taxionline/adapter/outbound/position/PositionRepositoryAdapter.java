@@ -1,8 +1,8 @@
 package org.taxionline.adapter.outbound.position;
 
-import org.taxionline.config.repository.BaseRepository;
-import org.taxionline.core.domain.position.Position;
-import org.taxionline.core.domain.ride.Ride;
+import org.taxionline.infra.repository.BaseRepository;
+import org.taxionline.domain.entity.position.Position;
+import org.taxionline.domain.entity.ride.Ride;
 import org.taxionline.port.outbound.position.PositionRepository;
 
 import java.util.List;
