@@ -5,9 +5,15 @@ import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeAll;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.taxionline.TaxiOnlineMain;
 import org.taxionline.config.dao.DataSourceManager;
 import org.taxionline.config.di.BeanRegistry;
 import org.taxionline.config.javalin.JavalinConfig;
+import org.taxionline.config.mediator.Mediator;
+import org.taxionline.util.AppConfigUtils;
+import org.yaml.snakeyaml.LoaderOptions;
+import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.constructor.Constructor;
 
 public abstract class IntegrationTestBase {
 
@@ -28,11 +34,18 @@ public abstract class IntegrationTestBase {
 
         logger.info("Initialize testing environment...");
 
+        var yaml = new Yaml(new Constructor(AppConfigUtils.class, new LoaderOptions()));
+        var config = (AppConfigUtils) yaml.load(TaxiOnlineMain.class.getClassLoader().getResourceAsStream("config-test.yaml"));
+
         manager = new DataSourceManagerTest();
-        manager.init();
+        manager.init(config);
 
         registry = new BeanRegistry();
-        registry.registerAllBeans(manager);
+
+        var mediator = new Mediator();
+//        mediator.register(RideCompletedEvent.eventName, (data) -> new ProcessPaymentBusiness().processPayment((RideCompletedEvent) data));
+
+        registry.registerAllBeans(manager, mediator);
         registry.injectDependencies();
 
         logger.info("In-memory H2 database started for testing.");
@@ -40,9 +53,9 @@ public abstract class IntegrationTestBase {
         app = JavalinConfig.createJavalin();
         JavalinConfig.registerExceptions(app);
         JavalinConfig.registerEndpoints(app, registry);
-        app.start("localhost", 8081);
+        app.start("localhost", config.getServer().getPort());
         RestAssured.baseURI = "http://localhost";
-        RestAssured.port = 8081;
-        logger.info("Server started at http://localhost:8081");
+        RestAssured.port = config.getServer().getPort();
+        logger.info("Server started at http://localhost:{}", config.getServer().getPort());
     }
 }

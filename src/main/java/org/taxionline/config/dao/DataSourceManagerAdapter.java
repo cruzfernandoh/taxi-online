@@ -22,22 +22,20 @@ public class DataSourceManagerAdapter implements DataSourceManager {
     EntityManagerFactory emf;
 
     @Override
-    public void init() {
+    public void init(AppConfigUtils config) {
         try {
             if (logger.isInfoEnabled())
                 logger.info("Initializing DatasourceManager ...");
 
-            AppConfigUtils configUtils = AppConfigUtils.getInstance();
-
             AgroalDataSourceConfiguration configuration = new AgroalDataSourceConfigurationSupplier()
                     .connectionPoolConfiguration(cp -> cp
-                            .maxSize(configUtils.getInt("db.max.pool-size"))
-                            .minSize(configUtils.getInt("db.min.pool-size"))
-                            .initialSize(configUtils.getInt("db.initial.pool-size"))
+                            .maxSize(config.getDatasource().getPool().getMaxSize())
+                            .minSize(config.getDatasource().getPool().getMinSize())
+                            .initialSize(config.getDatasource().getPool().getInitialSize())
                             .connectionFactoryConfiguration(cf -> cf
-                                    .jdbcUrl(configUtils.get("db.url"))
-                                    .principal(new NamePrincipal(configUtils.get("db.user")))
-                                    .credential(new SimplePassword(configUtils.get("db.password")))
+                                    .jdbcUrl(config.getDatasource().getUrl())
+                                    .principal(new NamePrincipal(config.getDatasource().getUser()))
+                                    .credential(new SimplePassword(config.getDatasource().getPassword()))
                             )
                     ).get();
 

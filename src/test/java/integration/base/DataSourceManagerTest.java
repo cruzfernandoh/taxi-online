@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.taxionline.config.dao.CustomPersistenceUnitInfo;
 import org.taxionline.config.dao.DataSourceManager;
+import org.taxionline.util.AppConfigUtils;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -22,7 +23,7 @@ public class DataSourceManagerTest implements DataSourceManager {
     EntityManagerFactory emf;
 
     @Override
-    public void init() {
+    public void init(AppConfigUtils config) {
         try {
             if (logger.isInfoEnabled())
                 logger.info("Initializing DatasourceManager ...");
@@ -33,9 +34,9 @@ public class DataSourceManagerTest implements DataSourceManager {
                             .minSize(1)
                             .initialSize(1)
                             .connectionFactoryConfiguration(cf -> cf
-                                    .jdbcUrl("jdbc:h2:mem:default")
+                                    .jdbcUrl(config.getDatasource().getUrl())
                                     .connectionProviderClassName("org.h2.Driver")
-                                    .principal(new NamePrincipal("test_user"))
+                                    .principal(new NamePrincipal(config.getDatasource().getUser()))
                             )
                     ).get();
 

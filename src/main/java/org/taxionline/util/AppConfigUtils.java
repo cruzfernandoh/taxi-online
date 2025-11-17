@@ -1,37 +1,48 @@
 package org.taxionline.util;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@NoArgsConstructor
 public class AppConfigUtils {
 
-    private final Properties props = new Properties();
+    private App app;
+    private Server server;
+    private DataSource datasource;
 
-    private AppConfigUtils() {
-        try (InputStream input = getClass().getClassLoader().getResourceAsStream("application.properties")) {
-            if (input == null) {
-                throw new RuntimeException("application.properties not found!");
-            }
-            props.load(input);
-        } catch (IOException e) {
-            throw new RuntimeException("Error loading configuration", e);
-        }
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public static final class App {
+        private String name;
     }
 
-    private static final class InstanceHolder {
-        private static final AppConfigUtils instance = new AppConfigUtils();
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public static final class Server {
+        private Integer port;
     }
 
-    public static AppConfigUtils getInstance() {
-        return InstanceHolder.instance;
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public static final class DataSource {
+        private Pool pool;
+        private String url;
+        private String user;
+        private String password;
     }
 
-    public String get(String key) {
-        return props.getProperty(key);
-    }
-
-    public int getInt(String key) {
-        return Integer.parseInt(props.getProperty(key));
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public static final class Pool {
+        private Integer maxSize;
+        private Integer minSize;
+        private Integer initialSize;
     }
 }

@@ -1,0 +1,13 @@
+app:
+  name: Taxi Online Server
+
+server:
+  port: 8081
+
+datasource:
+  pool:
+    maxSize: 10
+    minSize: 2
+    initialSize: 5
+  url: jdbc:h2:mem:default
+  user: "test_user"
