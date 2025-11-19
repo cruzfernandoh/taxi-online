@@ -10,6 +10,8 @@ import org.taxionline.domain.entity.base.IdModelBase;
 import org.taxionline.domain.entity.vo.CPF;
 import org.taxionline.domain.entity.vo.Email;
 import org.taxionline.domain.entity.vo.Name;
+import org.taxionline.domain.entity.vo.Password;
+import org.taxionline.domain.factory.password.PasswordFactory;
 
 @Getter
 @Setter
@@ -33,7 +35,7 @@ public class Account extends IdModelBase {
     private boolean isDriver;
 
     @Column(nullable = false)
-    private String password;
+    private Password password;
 
     @Column(nullable = false)
     private String password_algorithm;
@@ -46,7 +48,7 @@ public class Account extends IdModelBase {
         this.carPlate = carPlate;
         this.isPassenger = isPassenger;
         this.isDriver = isDriver;
-        this.password = password;
+        this.password = PasswordFactory.create(password, password_algorithm);
         this.password_algorithm = password_algorithm;
     }
 }

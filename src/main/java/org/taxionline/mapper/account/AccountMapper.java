@@ -43,7 +43,7 @@ public class AccountMapper implements BaseMapper<Account, AccountDTO> {
                         .isPassenger(t.idPassenger())
                         .isDriver(t.isDriver())
                         .password(t.password())
-                        .password_algorithm("must filled")
+                        .password_algorithm(t.password_algorithm())
                         .build())
                 .orElse(null);
     }

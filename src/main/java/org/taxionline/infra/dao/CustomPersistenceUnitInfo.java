@@ -75,6 +75,7 @@ public class CustomPersistenceUnitInfo implements PersistenceUnitInfo {
                 "org.taxionline.domain.entity.vo.converter.CPFConverter",
                 "org.taxionline.domain.entity.vo.converter.NameConverter",
                 "org.taxionline.domain.entity.vo.converter.EmailConverter",
+                "org.taxionline.domain.entity.vo.converter.PasswordConverter",
                 "org.taxionline.domain.entity.ride.Ride",
                 "org.taxionline.domain.entity.position.Position");
     }

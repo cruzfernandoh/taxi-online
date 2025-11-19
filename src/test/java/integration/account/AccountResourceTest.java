@@ -14,7 +14,7 @@ public class AccountResourceTest extends IntegrationTestBase {
     @Test
     public void testCreateAccount_with200StatusCode() {
         String email = "gon" + Math.random() + "@gmail.com";
-        CreateAccountDTO dto = new CreateAccountDTO("Gon Cruz", "08102622660", email, null, false, false, "123456", "not used");
+        CreateAccountDTO dto = new CreateAccountDTO("Gon Cruz", "08102622660", email, null, false, false, "123456", "md5");
         RestAssured.given()
                 .when()
                 .body(dto)
@@ -32,7 +32,7 @@ public class AccountResourceTest extends IntegrationTestBase {
 
     @Test
     public void testCreateAccount_with409StatusCodeCPFDuplicated() {
-        CreateAccountDTO dto = new CreateAccountDTO("Gon Cruz", "277.979.950-10", "gon@gmail.com", null, false, false, "123456", "not used");
+        CreateAccountDTO dto = new CreateAccountDTO("Gon Cruz", "277.979.950-10", "gon@gmail.com", null, false, false, "123456", "md5");
         RestAssured.given()
                 .when()
                 .body(dto)
@@ -54,7 +54,7 @@ public class AccountResourceTest extends IntegrationTestBase {
     @Test
     public void testFindAccount_with409StatusCodeEmailDuplicated() {
         String email = "gon" + Math.random() + "@gmail.com";
-        CreateAccountDTO dto = new CreateAccountDTO("Gon Cruz", "035.296.400-69", email, null, false, false, "123456", "not used");
+        CreateAccountDTO dto = new CreateAccountDTO("Gon Cruz", "035.296.400-69", email, null, false, false, "123456", "textplain");
         RestAssured.given()
                 .when()
                 .body(dto)
@@ -64,7 +64,7 @@ public class AccountResourceTest extends IntegrationTestBase {
                 .statusCode(200)
                 .extract().body().path("identifier");
 
-        CreateAccountDTO dto2 = new CreateAccountDTO("Gon Cruz", "861.284.280-88", email, null, false, false, "123456", "not used");
+        CreateAccountDTO dto2 = new CreateAccountDTO("Gon Cruz", "861.284.280-88", email, null, false, false, "123456", "sha1");
         RestAssured.given()
                 .when()
                 .body(dto2)
@@ -89,7 +89,7 @@ public class AccountResourceTest extends IntegrationTestBase {
     @Test
     public void testFindAccount_with200StatusCode() {
         String email = "gon" + Math.random() + "@gmai.com";
-        CreateAccountDTO dto = new CreateAccountDTO("Gon Cruz", "166.956.200-08", email, null, false, false, "123456", "not used");
+        CreateAccountDTO dto = new CreateAccountDTO("Gon Cruz", "166.956.200-08", email, null, false, false, "123456", "md5");
         String identifier = RestAssured.given()
                 .when()
                 .body(dto)
@@ -110,7 +110,7 @@ public class AccountResourceTest extends IntegrationTestBase {
     @Test
     public void testCreateAccount_with400StatusCodeInvalidCpf() {
         String email = "gon" + Math.random() + "@gmail.com";
-        CreateAccountDTO dto = new CreateAccountDTO("Gon Cruz", "123456789", email, null, false, false, "123456", "not used");
+        CreateAccountDTO dto = new CreateAccountDTO("Gon Cruz", "123456789", email, null, false, false, "123456", "sha1");
         RestAssured.given()
                 .when()
                 .body(dto)
@@ -124,7 +124,7 @@ public class AccountResourceTest extends IntegrationTestBase {
     @Test
     public void testCreateAccount_with400StatusCodeNullAndEmptyCpf() {
         String email = "gon" + Math.random() + "@gmail.com";
-        CreateAccountDTO dto = new CreateAccountDTO("Gon Cruz", null, email, null, false, false, "123456", "not used");
+        CreateAccountDTO dto = new CreateAccountDTO("Gon Cruz", null, email, null, false, false, "123456", "textplain");
         RestAssured.given()
                 .when()
                 .body(dto)
@@ -135,7 +135,7 @@ public class AccountResourceTest extends IntegrationTestBase {
                 .body("message", equalTo("Field CPF mandatory"));
 
         String email2 = "gon" + Math.random() + "@gmail.com";
-        CreateAccountDTO dto2 = new CreateAccountDTO("Gon Cruz", "", email2, null, false, false, "123456", "not used");
+        CreateAccountDTO dto2 = new CreateAccountDTO("Gon Cruz", "", email2, null, false, false, "123456", "md5");
         RestAssured.given()
                 .when()
                 .body(dto2)
@@ -148,7 +148,7 @@ public class AccountResourceTest extends IntegrationTestBase {
 
     @Test
     public void testCreateAccount_with400StatusCodeNullAndEmptyEmail() {
-        CreateAccountDTO dto = new CreateAccountDTO("Gon Cruz", "086.007.180-40", null, null, false, false, "123456", "not used");
+        CreateAccountDTO dto = new CreateAccountDTO("Gon Cruz", "086.007.180-40", null, null, false, false, "123456", "md5");
         RestAssured.given()
                 .when()
                 .body(dto)
@@ -158,7 +158,7 @@ public class AccountResourceTest extends IntegrationTestBase {
                 .statusCode(400)
                 .body("message", equalTo("Field email mandatory"));
 
-        CreateAccountDTO dto2 = new CreateAccountDTO("Gon Cruz", "909.743.860-81", "", null, false, false, "123456", "not used");
+        CreateAccountDTO dto2 = new CreateAccountDTO("Gon Cruz", "909.743.860-81", "", null, false, false, "123456", "md5");
         RestAssured.given()
                 .when()
                 .body(dto2)
@@ -172,7 +172,7 @@ public class AccountResourceTest extends IntegrationTestBase {
     @Test
     public void testCreateDriverAccount_with200StatusCode() {
         String email = "gon" + Math.random() + "@gmail.com";
-        CreateAccountDTO dto = new CreateAccountDTO("Gon Cruz", "254.946.140-18", email, "PVH3230", false, true, "123456", "not used");
+        CreateAccountDTO dto = new CreateAccountDTO("Gon Cruz", "254.946.140-18", email, "PVH3230", false, true, "123456", "textplain");
         RestAssured.given()
                 .when()
                 .body(dto)
@@ -191,7 +191,7 @@ public class AccountResourceTest extends IntegrationTestBase {
 
     @Test
     public void testCreateDriverAccount_with400StatusCodeInvalidCarPlate() {
-        CreateAccountDTO dto = new CreateAccountDTO("Gon Cruz", "816.005.460-21", "gon" + Math.random() + "@gmail.com", null, false, true, "123456", "not used");
+        CreateAccountDTO dto = new CreateAccountDTO("Gon Cruz", "816.005.460-21", "gon" + Math.random() + "@gmail.com", null, false, true, "123456", "sha1");
         RestAssured.given()
                 .when()
                 .body(dto)
@@ -201,7 +201,7 @@ public class AccountResourceTest extends IntegrationTestBase {
                 .statusCode(400)
                 .body("message", equalTo("Invalid car plate"));
 
-        CreateAccountDTO dto2 = new CreateAccountDTO("Gon Cruz", "857.275.700-77", "gon" + Math.random() + "@gmail.com", "", false, true, "123456", "not used");
+        CreateAccountDTO dto2 = new CreateAccountDTO("Gon Cruz", "857.275.700-77", "gon" + Math.random() + "@gmail.com", "", false, true, "123456", "sha1");
         RestAssured.given()
                 .when()
                 .body(dto2)
